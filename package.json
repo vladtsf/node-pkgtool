@@ -17,7 +17,7 @@
     "npm",
     "package"
   ],
-  "repository": "git://github.com/vtsvang/pkghold.git",
+  "repository": "git://github.com/vtsvang/node-pkgtool.git",
   "main": "index.js",
   "bin": {
     "pkgtool": "bin/pkgtool"
