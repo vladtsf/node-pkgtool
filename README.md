@@ -1,4 +1,4 @@
-# pkgtool
+# pkgtool [![Build Status](https://travis-ci.org/vtsvang/node-pkgtool.png)](https://travis-ci.org/vtsvang/node-pkgtool)
 
 Tool for managing package's dependencies versions.
 
