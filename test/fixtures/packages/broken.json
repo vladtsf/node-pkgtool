@@ -1,0 +1,13 @@
+{
+  "name": "dummy-package-name",
+  "version": "0.0.0",
+  "dependencies": {
+    "coffee-script": "*",
+    "commander": "*",
+    "async": "*"
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "sinon": "*"
+  }
+}

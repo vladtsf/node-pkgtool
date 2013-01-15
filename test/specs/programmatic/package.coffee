@@ -1,20 +1,38 @@
 describe "Package", ->
 
   beforeEach ->
+    try fs.mkdirSync path.join __tmpDir, "empty"
+    try fs.mkdirSync path.join __tmpDir, "successful"
+    try fs.mkdirSync path.join __tmpDir, "broken"
+    try fs.writeFileSync path.join( __tmpDir, "successful", "package.json" ), fs.readFileSync( __fixturesPaths.successful )
+    try fs.writeFileSync path.join( __tmpDir, "broken", "package.json" ), fs.readFileSync( __fixturesPaths.broken )
 
-  describe "@save()", ->
+    try @successful = pkgtool path.join __tmpDir, "successful"
+    try @broken = pkgtool path.join __tmpDir, "broken"
+    try @empty = pkgtool path.join __tmpDir, "empty"
 
-    it "should write package.json to disc", ->
-    it "should invoke callback", ->
+  afterEach ->
+    try fs.unlink path.join __tmpDir, "successful", "package.json"
+    try fs.unlink path.join __tmpDir, "broken", "package.json"
+    try fs.rmdirSync path.join __tmpDir, "empty"
+    try fs.rmdirSync path.join __tmpDir, "successful"
+    try fs.rmdirSync path.join __tmpDir, "broken", "package.json"
 
   describe "@load()", ->
 
-    it "should lookup package.json in specified directory", ->
+    it "should lookup package.json in specified directory", ( done ) ->
+      @successful.load done
+
     it "should fill @dependencies property", ->
     it "should fill @devDependencies property", ->
     it "should raise an error if package.json not exists", ->
     it "should invoke @create() if package.json not exists but containing directory is present", ->
     it "should raise an error if package.json not valid", ->
+    it "should invoke callback", ->
+
+  describe "@save()", ->
+
+    it "should write package.json", ->
     it "should invoke callback", ->
 
   describe "@create()", ->
