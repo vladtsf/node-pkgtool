@@ -6,7 +6,7 @@ Tool for managing package's dependencies versions.
 
 ## Installation
 
-  $ npm install -g pkgtool
+    $ npm install -g pkgtool
 
 ## Features
 
