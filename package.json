@@ -1,0 +1,31 @@
+{
+  "name": "pkghold",
+  "description": "Tool for holding package dependencies versions",
+  "version": "0.0.0",
+  "author": "Vladimir Tsvang <vtsvang@gmail.com>",
+  "dependencies": {
+    "coffee-script": "*",
+    "async": "0.1.22"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  },
+  "keywords": [
+    "npm",
+    "package"
+  ],
+  "readme": "README.md",
+  "repository": "git://github.com/vtsvang/pkghold.git",
+  "main": "index.js",
+  "bin": {
+    "pkghold": "bin/pkghold"
+  },
+  "scripts": {
+    "prepublish" : "npm prune",
+    "test": "mocha tests/*_spec.coffee"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
