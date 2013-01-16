@@ -62,15 +62,22 @@ describe "Package", ->
     it "should invoke callback", ( done ) ->
       @successful.load done
 
-  describe "@save()", ->
-
-    it "should write package.json", ->
-    it "should invoke callback", ->
-
   describe "@create()", ->
     it "should lookup package.json in specified directory", ->
     it "should fill @dependencies property", ->
     it "should fill @devDependencies property", ->
+
+  describe "@save()", ->
+
+    it "should write package.json", ( done ) ->
+      @empty.create ( err ) ->
+        @save ( err ) ->
+          ( fs.existsSync path.join __tmpDir, "empty", "package.json" ).should.be.true
+          done()
+
+    it "should invoke callback", ( done ) ->
+      @successful.create ( err ) ->
+        @save done
 
   describe "@update()", ->
 
