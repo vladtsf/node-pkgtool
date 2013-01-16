@@ -63,9 +63,20 @@ describe "Package", ->
       @successful.load done
 
   describe "@create()", ->
-    it "should lookup package.json in specified directory", ->
-    it "should fill @dependencies property", ->
+    it "should lookup package.json in specified directory", ( done ) ->
+      @empty.create ( err ) ->
+        @empty.packagePath.should.equal path.join( fs.realpathSync path.join __tmpDir, "empty" ), "package.json"
+        done()
+
+    it "should fill @dependencies property", ( done ) ->
+      @empty.create ( err ) ->
+        @dependencies.should.be.a "object"
+        done()
+
     it "should fill @devDependencies property", ->
+      @empty.create ( err ) ->
+        @devDependencies.should.be.a "object"
+        done()
 
   describe "@save()", ->
 
