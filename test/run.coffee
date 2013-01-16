@@ -10,4 +10,4 @@ describe "Programmatic API", ->
     try fs.mkdirSync __tmpDir
 
   after ->
-    try fs.rmdirSync __tmpDir
+    try wrench.rmdirSyncRecursive path.join __tmpDir

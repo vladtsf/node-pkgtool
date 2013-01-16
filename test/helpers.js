@@ -1,6 +1,9 @@
 global.fs = require( "fs" )
 global.path = require( "path" )
+global.wrench = require( "wrench" )
+global.sinon = require( "sinon" )
 global.pkgtool = require( "../index.coffee" )
+global.shld = require( "should" )
 global.__testsRootDir = __dirname
 global.__tmpDir = path.join(fs.realpathSync( path.join( __dirname, ".." ) ), ".tmp")
 

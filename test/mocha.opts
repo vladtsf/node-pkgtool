@@ -5,6 +5,7 @@
 --colors
 --reporter spec
 --require should
+--require wrench
 --require coffee-script
 --require test/helpers.js
 --growl

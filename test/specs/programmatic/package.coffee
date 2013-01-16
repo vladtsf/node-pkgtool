@@ -10,25 +10,57 @@ describe "Package", ->
     try @successful = pkgtool path.join __tmpDir, "successful"
     try @broken = pkgtool path.join __tmpDir, "broken"
     try @empty = pkgtool path.join __tmpDir, "empty"
+    try @nonexistent = pkgtool path.join __tmpDir, "nonexistent"
 
   afterEach ->
-    try fs.unlink path.join __tmpDir, "successful", "package.json"
-    try fs.unlink path.join __tmpDir, "broken", "package.json"
-    try fs.rmdirSync path.join __tmpDir, "empty"
-    try fs.rmdirSync path.join __tmpDir, "successful"
-    try fs.rmdirSync path.join __tmpDir, "broken", "package.json"
+    try wrench.rmdirSyncRecursive path.join __tmpDir, "empty"
+    try wrench.rmdirSyncRecursive path.join __tmpDir, "successful"
+    try wrench.rmdirSyncRecursive path.join __tmpDir, "broken"
 
   describe "@load()", ->
 
     it "should lookup package.json in specified directory", ( done ) ->
       @successful.load done
 
-    it "should fill @dependencies property", ->
-    it "should fill @devDependencies property", ->
-    it "should raise an error if package.json not exists", ->
-    it "should invoke @create() if package.json not exists but containing directory is present", ->
-    it "should raise an error if package.json not valid", ->
-    it "should invoke callback", ->
+    it "should fill @dependencies property", ( done ) ->
+      @successful.load ( err ) ->
+        @dependencies
+          .should.be.a( "object" )
+          .and.have.property( "coffee-scrip" )
+          .and.have.property( "commander" )
+          .and.have.property( "async" )
+
+          done()
+
+    it "should fill @devDependencies property", ( done ) ->
+      @successful.load ( err ) ->
+        @devDependencies
+          .should.be.a( "object" )
+          .and.have.property( "mocha" )
+          .and.have.property( "should" )
+          .and.have.property( "sinon" )
+
+          done()
+
+    it "should raise an error if package.json not exists", ( done ) ->
+      @nonexistent.load ( err ) ->
+        shld.exist err
+        done()
+
+    it "should invoke @create() if package.json not exists but containing directory is present", ( done ) ->
+      create = sinon.spy @empty, "create"
+
+      @empty.load ( err ) ->
+        create.calledOnce.should.be.true
+        done()
+
+    it "should raise an error if package.json not valid", ( done ) ->
+      @broken.load ( err ) ->
+        shld.exist err
+        done()
+
+    it "should invoke callback", ( done ) ->
+      @successful.load done
 
   describe "@save()", ->
 

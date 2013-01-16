@@ -6,7 +6,8 @@
   "dependencies": {
     "coffee-script": "*",
     "commander": "*",
-    "async": "*"
+    "async": "*",
+    "wrench": "*"
   },
   "devDependencies": {
     "mocha": "*",
