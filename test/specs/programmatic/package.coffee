@@ -6,6 +6,7 @@ describe "Package", ->
     try fs.mkdirSync path.join __tmpDir, "broken"
     try fs.writeFileSync path.join( __tmpDir, "successful", "package.json" ), fs.readFileSync( __fixturesPaths.successful )
     try fs.writeFileSync path.join( __tmpDir, "broken", "package.json" ), fs.readFileSync( __fixturesPaths.broken )
+    wrench.copyDirSyncRecursive __fixturesPaths.nodeModules, path.join( __tmpDir, "successful", "node_modules" )
 
     try @successful = pkgtool path.join __tmpDir, "successful"
     try @broken = pkgtool path.join __tmpDir, "broken"
@@ -92,14 +93,40 @@ describe "Package", ->
 
   describe "@update()", ->
 
-    it "should update only specified package if it's name passed", ->
-    it "should fetch all the latest versions of dependencies and hold it", ->
-    it "should invoke callback", ->
+    it "should update only specified package if it's name passed", ( done ) ->
+      fetch = sinon.spy @successful, "fetch"
+
+      @successful.load ( err ) ->
+        @update "mocha", ( err ) ->
+          fetch.calledWithExactly "mocha"
+          fetch.calledOnce
+          done()
+
+    it "should fetch all the latest versions of dependencies", ( done ) ->
+      fetch = sinon.spy @successful, "fetch"
+
+      @successful.load ( err ) ->
+        @update ( err ) ->
+          for own dep in [ "coffee-script", "commander", "async", "mocha", "should", "sinon" ]
+            fetch.calledWith( dep ).should.be.true
+
+          done()
+
+    it "should invoke callback", ( done ) ->
+      @successful.load ( err ) ->
+        @update "mocha", done
 
   describe "@expand()", ->
 
-    it "should lookup dependencies which not specified in package.json in node_modules directory", ->
-    it "should invoke callback", ->
+    it "should lookup dependencies which not specified in package.json in node_modules directory", ( done ) ->
+      @successful.load ( err ) ->
+        @expand ( err ) ->
+          @dependencies.should.have.property "foo", "0.0.1"
+          done()
+
+    it "should invoke callback", ( done ) ->
+      @successful.load ( err ) ->
+        @expand done
 
   describe "@fetch()", ->
 

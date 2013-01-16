@@ -9,5 +9,6 @@ global.__tmpDir = path.join(fs.realpathSync( path.join( __dirname, ".." ) ), ".t
 
 global.__fixturesPaths = {
   successful: path.join( __testsRootDir, "fixtures", "packages", "successful.json" ),
-  broken: path.join( __testsRootDir, "fixtures", "packages", "broken.json" )
+  broken: path.join( __testsRootDir, "fixtures", "packages", "broken.json" ),
+  nodeModules: path.join( __testsRootDir, "fixtures", "packages", "node_modules" )
 }
