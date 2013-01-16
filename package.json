@@ -12,7 +12,8 @@
   "devDependencies": {
     "mocha": "*",
     "should": "*",
-    "sinon": "*"
+    "sinon": "*",
+    "request": "*"
   },
   "keywords": [
     "npm",

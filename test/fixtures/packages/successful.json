@@ -4,10 +4,11 @@
   "dependencies": {
     "coffee-script": "*",
     "commander": "*",
-    "async": "*"
+    "async": "*",
+    "foo": "*"
   },
   "devDependencies": {
-    "mocha": "*",
+    "mocha": "1.8.0",
     "should": "*",
     "sinon": "*"
   }

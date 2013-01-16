@@ -6,6 +6,7 @@
 --reporter spec
 --require should
 --require wrench
+--require request
 --require coffee-script
 --require test/helpers.js
 --growl

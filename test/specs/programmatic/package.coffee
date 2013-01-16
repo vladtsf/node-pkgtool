@@ -1,12 +1,18 @@
 describe "Package", ->
 
+  before ( done )  ->
+    request "https://registry.npmjs.org/mocha/latest/", ( err, res ) =>
+      @latestMochaVersion = JSON.parse( res.body ).version
+      done()
+
+
   beforeEach ->
     try fs.mkdirSync path.join __tmpDir, "empty"
     try fs.mkdirSync path.join __tmpDir, "successful"
     try fs.mkdirSync path.join __tmpDir, "broken"
     try fs.writeFileSync path.join( __tmpDir, "successful", "package.json" ), fs.readFileSync( __fixturesPaths.successful )
     try fs.writeFileSync path.join( __tmpDir, "broken", "package.json" ), fs.readFileSync( __fixturesPaths.broken )
-    wrench.copyDirSyncRecursive __fixturesPaths.nodeModules, path.join( __tmpDir, "successful", "node_modules" )
+    try wrench.copyDirSyncRecursive __fixturesPaths.nodeModules, path.join( __tmpDir, "successful", "node_modules" )
 
     try @successful = pkgtool path.join __tmpDir, "successful"
     try @broken = pkgtool path.join __tmpDir, "broken"
@@ -130,7 +136,30 @@ describe "Package", ->
 
   describe "@fetch()", ->
 
-    it "should determine the latest version of package", ->
-    it "should fetch only specified package if it's name passed", ->
-    it "should go to npmjs.org if the force flag passed", ->
-    it "should invoke callback", ->
+    it "should determine the latest version of package", ( done ) ->
+      @successful.load ( err ) ->
+        @fetch "mocha", ( err, version ) ->
+          version.should.equal @latestMochaVersion
+          done()
+
+    it "should try determine version according from node_modules containment at first", ( done ) ->
+      @successful.load ( err ) ->
+        @fetch "foo", ( err, version ) ->
+          version.should.equal "0.0.1"
+          done()
+
+    it "should go to npmjs.org if the force flag passed", ( done ) ->
+      @successful.load ( err ) ->
+        @fetch "mocha", ( err, version ) ->
+          version.should.equal @latestMochaVersion
+          done()
+
+    it "should raise error if package not exists", ( done ) ->
+      @successful.load ( err ) ->
+        @fetch "undefined", ( err, version ) ->
+          shld.exist err
+
+    it "should invoke callback", ( done ) ->
+      @successful.load ( err ) ->
+        @fetch "foo", done
+
