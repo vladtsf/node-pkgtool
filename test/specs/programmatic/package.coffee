@@ -1,29 +1,5 @@
 describe "Package", ->
 
-  before ( done )  ->
-    request "https://registry.npmjs.org/mocha/latest/", ( err, res ) =>
-      @latestMochaVersion = JSON.parse( res.body ).version
-      done()
-
-
-  beforeEach ->
-    try fs.mkdirSync path.join __tmpDir, "empty"
-    try fs.mkdirSync path.join __tmpDir, "successful"
-    try fs.mkdirSync path.join __tmpDir, "broken"
-    try fs.writeFileSync path.join( __tmpDir, "successful", "package.json" ), fs.readFileSync( __fixturesPaths.successful )
-    try fs.writeFileSync path.join( __tmpDir, "broken", "package.json" ), fs.readFileSync( __fixturesPaths.broken )
-    try wrench.copyDirSyncRecursive __fixturesPaths.nodeModules, path.join( __tmpDir, "successful", "node_modules" )
-
-    try @successful = pkgtool path.join __tmpDir, "successful"
-    try @broken = pkgtool path.join __tmpDir, "broken"
-    try @empty = pkgtool path.join __tmpDir, "empty"
-    try @nonexistent = pkgtool path.join __tmpDir, "nonexistent"
-
-  afterEach ->
-    try wrench.rmdirSyncRecursive path.join __tmpDir, "empty"
-    try wrench.rmdirSyncRecursive path.join __tmpDir, "successful"
-    try wrench.rmdirSyncRecursive path.join __tmpDir, "broken"
-
   describe "@load()", ->
 
     it "should lookup package.json in specified directory", ( done ) ->
@@ -150,7 +126,7 @@ describe "Package", ->
 
     it "should go to npmjs.org if the force flag passed", ( done ) ->
       @successful.load ( err ) ->
-        @fetch "mocha", ( err, version ) ->
+        @fetch "mocha", on, ( err, version ) ->
           version.should.equal @latestMochaVersion
           done()
 
