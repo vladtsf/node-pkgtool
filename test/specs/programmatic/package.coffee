@@ -11,23 +11,20 @@ describe "Package", ->
 
     it "should fill @dependencies property", ( done ) ->
       @successful.load ( err ) ->
-        @dependencies
-          .should.be.a( "object" )
-          .and.have.property( "coffee-scrip" )
-          .and.have.property( "commander" )
-          .and.have.property( "async" )
+        @dependencies.should.be.a( "object" )
+        @dependencies.should.have.property( "coffee-script" )
+        @dependencies.should.have.property( "commander" )
+        @dependencies.should.have.property( "async" )
 
-          done()
+        done()
 
     it "should fill @devDependencies property", ( done ) ->
       @successful.load ( err ) ->
-        @devDependencies
-          .should.be.a( "object" )
-          .and.have.property( "mocha" )
-          .and.have.property( "should" )
-          .and.have.property( "sinon" )
+        @devDependencies.should.be.a( "object" )
+        @devDependencies.should.have.property( "mocha" )
+        @devDependencies.should.have.property( "sinon" )
 
-          done()
+        done()
 
     it "should raise an error if package.json not exists", ( done ) ->
       @nonexistent.load ( err ) ->

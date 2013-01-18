@@ -25,7 +25,7 @@ class Package
   # @param [Function] callback will be invoked when done
   # @return [Package] package instance
   #
-  lookup: ( callback ) ->
+  lookup: ( callback = -> ) ->
     # check file/dir stats
     fs.stat @path, ( err, stats ) =>
       # file/dir not exists
@@ -56,8 +56,27 @@ class Package
   # @param [Function] callback will be invoked when loading finishes
   # @return [Package] package instance
   #
-  load: ( callback ) ->
-    @lookup ->
+  load: ( callback = -> ) ->
+    @lookup ( err ) ->
+      # throw error if lookup failed
+      return callback.call( @, err ) if err
+
+      try
+        # try to load info from package.json
+        pkg = require @path
+
+        # fill dependencies
+        @dependencies = pkg.dependencies
+        @devDependencies = pkg.devDependencies
+
+        callback.call @
+      catch e
+        if e.code is "MODULE_NOT_FOUND"
+          # if package.json not exists, should initialize dependencies
+          @create callback
+        else
+          # if package.json is broken
+          callback.call @, e
 
     @
 
@@ -73,7 +92,11 @@ class Package
   # @param [Function] callback will be invoked when package created
   # @return [Package] package instance
   #
-  create: ( callback ) ->
+  create: ( callback = -> ) ->
+    @dependencies = {}
+    @devDependencies = {}
+
+    callback.call @
 
     @
 
@@ -93,7 +116,7 @@ class Package
   # @param [Function] callback will be invoked when package saved
   # @return [Package] package instance
   #
-  save: ( callback ) ->
+  save: ( callback = -> ) ->
 
     @
 
@@ -119,7 +142,7 @@ class Package
   # @param [Function] callback will be invoked when dependencies updated
   # @return [Package] package instance
   #
-  update: ( packages, callback ) ->
+  update: ( packages, callback = -> ) ->
 
     @
 
@@ -136,7 +159,7 @@ class Package
   # @param [Function] callback will be invoked when done
   # @return [Package] package instance
   #
-  expand: ( callback ) ->
+  expand: ( callback = -> ) ->
 
     @
 
