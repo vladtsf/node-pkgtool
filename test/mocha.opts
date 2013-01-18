@@ -1,6 +1,6 @@
 --ui bdd
---timeout 5000
---slow 500
+--timeout 2000
+--slow 75
 --compilers coffee:coffee-script
 --colors
 --reporter spec

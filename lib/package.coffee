@@ -113,12 +113,12 @@ class Package
   #       else
   #         console.log "expand failed"
   #
-  # @param [String] package package name
+  # @param [String] packageName package name
   # @param [Boolean] forceRemote load info from npm registry
   # @param [Function] callback will be invoked when done
   # @return [Package] package instance
   #
-  fetch: ( package, forceRemote, callback = -> ) ->
+  fetch: ( packageName, forceRemote, callback = -> ) ->
 
     @
 

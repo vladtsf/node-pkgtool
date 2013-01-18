@@ -56,7 +56,7 @@ describe "Package", ->
         @dependencies.should.be.a "object"
         done()
 
-    it "should fill @devDependencies property", ->
+    it "should fill @devDependencies property", ( done ) ->
       @empty.create ( err ) ->
         @devDependencies.should.be.a "object"
         done()
