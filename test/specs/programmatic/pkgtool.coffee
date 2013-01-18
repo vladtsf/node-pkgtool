@@ -4,6 +4,6 @@ describe "pkgtool", ->
     pkgtool( path.join __tmpDir ).should.be.instanceOf pkgtool.Package
 
   it "should raise exception if the package path didn't passed", ->
-    (do pkgtool).should.throw()
+    pkgtool.should.throw()
 
   require "./package"
