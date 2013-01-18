@@ -100,7 +100,7 @@ describe "Package", ->
     it "should lookup dependencies which not specified in package.json in node_modules directory", ( done ) ->
       @successful.load ( err ) ->
         @expand ( err ) ->
-          @dependencies.should.have.property "foo", "0.0.1"
+          @dependencies.should.have.property "dummy-package-name", "0.0.0"
           done()
 
     it "should invoke callback", ( done ) ->

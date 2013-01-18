@@ -4,6 +4,8 @@ class Package
 
   fs = require "fs"
   util = require "util"
+  glob = require "glob"
+  path = require "path"
 
   # Construct a new package.
   #
@@ -121,7 +123,7 @@ class Package
   # @return [Package] package instance
   #
   save: ( callback = -> ) ->
-    @load ( err ) =>
+    @lookup ( err ) =>
       return callback.call( @, err ) if err
 
       # save file and invoke successful callback
@@ -153,6 +155,7 @@ class Package
   # @return [Package] package instance
   #
   update: ( packages, callback = -> ) ->
+    callback(err)
 
     @
 
@@ -170,6 +173,22 @@ class Package
   # @return [Package] package instance
   #
   expand: ( callback = -> ) ->
+    @lookup ( err ) ->
+      return callback.call( @, err ) if err
+
+      # find packages in node_modules
+      glob ( path.join ( path.dirname @path ), "**", "package.json" ), ( err, files ) =>
+        return callback.call( @, err ) if err
+
+        for own file in files
+          try
+            { name, version } = require file
+
+            # if this package not listed in dependencies, add it
+            unless ( name in Object.keys @dependencies ) or ( name in Object.keys @devDependencies )
+              @dependencies[ name ] = version
+
+        callback.call @
 
     @
 
