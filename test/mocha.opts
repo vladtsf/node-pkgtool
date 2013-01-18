@@ -1,5 +1,5 @@
 --ui bdd
---timeout 2000
+--timeout 5000
 --slow 75
 --compilers coffee:coffee-script
 --colors

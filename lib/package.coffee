@@ -7,6 +7,42 @@ class Package
   # @param [String] @path path to package.json file
   #
   constructor: ( @path ) ->
+    # Package's dependencies for production
+    @dependencies = {}
+
+    # Package's dependencies for development
+    @devDependencies = {}
+
+  # Lookup package.json path.
+  #
+  # @example Lookup package.json
+  #   new Package( __dirname ).lokup ( err ) ->
+  #     unless err
+  #       console.log "package.json placed at #{ @path }"
+  #     else
+  #       console.log "failed to lookup package.json"
+  #
+  # @param [Function] callback will be invoked when done
+  # @return [Package] package instance
+  #
+  lookup: ( callback ) ->
+    # check file/dir stats
+    fs.stat @path, ( err, stats ) =>
+      # file/dir not exists
+      return callback.call( @, err ) if err
+
+      # it is a path to package.json
+      return callback.call( @ ) if stats.isFile()
+
+      # try to load file in specified dir
+      @path = path.join @path, "package.json"
+
+      # invoke the callback of success
+      callback.call @
+
+    @
+
+
 
   # Load package.
   #
@@ -21,6 +57,7 @@ class Package
   # @return [Package] package instance
   #
   load: ( callback ) ->
+    @lookup ->
 
     @
 

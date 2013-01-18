@@ -1,9 +1,13 @@
 describe "Package", ->
 
-  describe "@load()", ->
+  describe "@lookup()", ->
 
     it "should lookup package.json in specified directory", ( done ) ->
-      @successful.load done
+      @successful.lookup ( err ) ->
+        @path.should.equal path.join( fs.realpathSync path.join __tmpDir, "successful", "package.json" ), "package.json"
+        done()
+
+  describe "@load()", ->
 
     it "should fill @dependencies property", ( done ) ->
       @successful.load ( err ) ->
@@ -46,10 +50,6 @@ describe "Package", ->
       @successful.load done
 
   describe "@create()", ->
-    it "should lookup package.json in specified directory", ( done ) ->
-      @empty.create ( err ) ->
-        @empty.packagePath.should.equal path.join( fs.realpathSync path.join __tmpDir, "empty" ), "package.json"
-        done()
 
     it "should fill @dependencies property", ( done ) ->
       @empty.create ( err ) ->
