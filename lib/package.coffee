@@ -2,6 +2,9 @@
 #
 class Package
 
+  fs = require "fs"
+  util = require "util"
+
   # Construct a new package.
   #
   # @param [String] @path path to package.json file
@@ -63,11 +66,11 @@ class Package
 
       try
         # try to load info from package.json
-        pkg = require @path
+        @pkg = require @path
 
         # fill dependencies
-        @dependencies = pkg.dependencies
-        @devDependencies = pkg.devDependencies
+        @dependencies = @pkg.dependencies
+        @devDependencies = @pkg.devDependencies
 
         callback.call @
       catch e
@@ -93,8 +96,9 @@ class Package
   # @return [Package] package instance
   #
   create: ( callback = -> ) ->
-    @dependencies = {}
-    @devDependencies = {}
+    @pkg =
+      dependencies: @dependencies = {}
+      devDependencies: @devDependencies = {}
 
     callback.call @
 
@@ -117,6 +121,12 @@ class Package
   # @return [Package] package instance
   #
   save: ( callback = -> ) ->
+    @load ( err ) =>
+      return callback.call( @, err ) if err
+
+      # save file and invoke successful callback
+      fs.writeFile @path, JSON.stringify( @pkg, null, "  " ), "utf8", ( err ) =>
+        callback.call @, err
 
     @
 
