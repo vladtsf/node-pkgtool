@@ -91,6 +91,18 @@ describe "Package", ->
 
           done()
 
+    it "should fetch all the versions of listed dependencies", ( done ) ->
+      fetch = sinon.spy @successful, "fetch"
+
+      @successful.load ( err ) ->
+        list = [ "coffee-script", "commander", "mocha" ]
+
+        @update list, ( err ) ->
+          for own dep in list
+            fetch.calledWith( dep ).should.be.true
+
+          done()
+
     it "should invoke callback", ( done ) ->
       @successful.load ( err ) ->
         @update "mocha", done
