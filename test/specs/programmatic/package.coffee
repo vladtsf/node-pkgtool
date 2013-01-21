@@ -110,27 +110,33 @@ describe "Package", ->
   describe "@fetch()", ->
 
     it "should determine the latest version of package", ( done ) ->
+      latestMochaVersion = @latestMochaVersion
+
       @successful.load ( err ) ->
         @fetch "mocha", ( err, version ) ->
-          version.should.equal @latestMochaVersion
+          version.should.equal latestMochaVersion
           done()
 
-    it "should try determine version according from node_modules containment at first", ( done ) ->
-      @successful.load ( err ) ->
+    it "should try to determine version according from node_modules containment at first", ( done ) ->
+      @successful2.load ( err ) ->
         @fetch "foo", ( err, version ) ->
+          shld.not.exist err
           version.should.equal "0.0.1"
           done()
 
     it "should go to npmjs.org if the force flag passed", ( done ) ->
+      latestMochaVersion = @latestMochaVersion
+
       @successful.load ( err ) ->
         @fetch "mocha", on, ( err, version ) ->
-          version.should.equal @latestMochaVersion
+          version.should.equal latestMochaVersion
           done()
 
     it "should raise error if package not exists", ( done ) ->
       @successful.load ( err ) ->
         @fetch "undefined", ( err, version ) ->
           shld.exist err
+          done()
 
     it "should invoke callback", ( done ) ->
       @successful.load ( err ) ->

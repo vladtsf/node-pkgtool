@@ -6,6 +6,7 @@ class Package
   util = require "util"
   glob = require "glob"
   path = require "path"
+  request = require "request"
 
   # Construct a new package.
   #
@@ -207,7 +208,34 @@ class Package
   # @param [Function] callback will be invoked when done
   # @return [Package] package instance
   #
-  fetch: ( packageName, forceRemote, callback = -> ) ->
+  fetch: ( packageName, forceRemote, callback ) ->
+    if typeof forceRemote is "function" and not callback
+      callback = forceRemote
+      forceRemote = off
+
+    ( callback = -> ) unless callback
+
+    if ( not forceRemote ) and fs.existsSync( depPath = path.join ( path.dirname @path ), "node_modules", packageName, "package.json" )
+      # try to determine version according from node_modules containment at first
+      try
+        callback.call @, null, require( depPath ).version
+      catch e
+        callback.call @, e
+    else
+      # fetch version from npm registry
+      request "https://registry.npmjs.org/#{ packageName }/latest/", ( err, res ) =>
+        # something went wrong
+        return callback.call( @, err ) if err?
+
+        # package not found or registry is down
+        return callback.call( @, new Error( "Package #{ packageName } not found" ) ) if res.statusCode isnt 200
+
+        try
+          # successful callback invocation
+          callback.call @, null, JSON.parse( res.body ).version
+        catch e
+          # if json not valid
+          callback.call @, e
 
     @
 

@@ -8,13 +8,13 @@
     "glob": "*",
     "commander": "*",
     "async": "*",
+    "request": "*",
     "wrench": "*"
   },
   "devDependencies": {
     "mocha": "*",
     "should": "*",
-    "sinon": "*",
-    "request": "*"
+    "sinon": "*"
   },
   "keywords": [
     "npm",
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "prepublish" : "npm prune",
-    "test": "./node_modules/mocha/bin/mocha test/run.coffee"
+    "test": "./node_modules/mocha/bin/mocha test/run.coffee --debug"
   },
   "engines": {
     "node": "*"
