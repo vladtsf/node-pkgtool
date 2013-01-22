@@ -44,8 +44,13 @@ class Package
       # try to load file in specified dir
       @path = path.join @path, "package.json"
 
-      # invoke the callback of success
-      callback.call @
+      # determine the full path
+      fs.realpath @path, ( err, realPath ) =>
+        # apply path if it exists
+        @path = realPath unless err?
+
+        # invoke the callback of success
+        callback.call @
 
     @
 
