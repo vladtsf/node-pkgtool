@@ -7,6 +7,7 @@ class Package
   glob = require "glob"
   path = require "path"
   request = require "request"
+  async = require "async"
 
   # Construct a new package.
   #
@@ -156,7 +157,34 @@ class Package
   # @return [Package] package instance
   #
   update: ( packages, callback = -> ) ->
-    callback(err)
+    # cache dependencies
+    dependencies = Object.keys @dependencies
+    devDependencies = Object.keys @devDependencies
+
+    # if passed only one package
+    packages = [ packages ] if typeof packages is "string"
+
+    # if packages argument is missing
+    if typeof packages is "function"
+      # callback was the first argument if the packages is missing
+      callback = packages
+      # load all the packages in dependencies
+      packages = [ dependencies..., devDependencies... ]
+
+    # load latest packages versions
+    async.map packages, ( ( pkg, done ) => @fetch pkg, on, done ), ( err, results ) =>
+      # handle errors
+      return callback.call( @, err ) if err?
+
+      # save changes
+      for own pkg, idx in packages
+        if pkg in dependencies
+          @dependencies[ pkg ] = results[ idx ]
+        else if pkg in devDependencies
+          @devDependencies[ pkg ] = results[ idx ]
+
+      # successful callback
+      callback.call @
 
     @
 

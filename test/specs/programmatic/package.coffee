@@ -71,6 +71,8 @@ describe "Package", ->
         @save done
 
   describe "@update()", ->
+    @timeout 10e3
+    @slow 3e3
 
     it "should update only specified package if it's name passed", ( done ) ->
       fetch = sinon.spy @successful, "fetch"
@@ -86,7 +88,7 @@ describe "Package", ->
 
       @successful.load ( err ) ->
         @update ( err ) ->
-          for own dep in [ "coffee-script", "commander", "async", "mocha", "should", "sinon" ]
+          for own dep in [ "coffee-script", "commander", "async", "mocha", "sinon" ]
             fetch.calledWith( dep ).should.be.true
 
           done()
@@ -120,6 +122,8 @@ describe "Package", ->
         @expand done
 
   describe "@fetch()", ->
+    @timeout 10e3
+    @slow 3e3
 
     it "should determine the latest version of package", ( done ) ->
       latestMochaVersion = @latestMochaVersion
