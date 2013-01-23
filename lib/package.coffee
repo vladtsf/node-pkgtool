@@ -268,7 +268,7 @@ class Package
       return callback.call( @, err ) if err
 
       # find packages in node_modules
-      glob ( path.join ( path.dirname @path ), "**", "package.json" ), ( err, files ) =>
+      glob ( path.join ( path.dirname @path ), "node_modules", "*", "package.json" ), ( err, files ) =>
         return callback.call( @, err ) if err
 
         for own file in files
@@ -276,7 +276,7 @@ class Package
             { name, version } = require file
 
             # if this package not listed in dependencies, add it
-            unless ( name in Object.keys @dependencies ) or ( name in Object.keys @devDependencies )
+            unless ( name in Object.keys ( @dependencies ? {} ) ) or ( name in Object.keys ( @devDependencies ? {} ) )
               @dependencies[ name ] = version
 
         callback.call @

@@ -14,6 +14,7 @@ global.__binaryPath = path.join( __dirname, "bin", "pkgtool" )
 
 global.__fixturesPaths = {
   successful: path.join( __testsRootDir, "fixtures", "packages", "successful.json" ),
+  foo: path.join( __testsRootDir, "fixtures", "packages", "node_modules", "foo", "package.json" ),
   broken: path.join( __testsRootDir, "fixtures", "packages", "broken.json" ),
   nodeModules: path.join( __testsRootDir, "fixtures", "packages", "node_modules" )
 }
