@@ -2,12 +2,6 @@
 
 Tool for managing package's dependencies versions.
 
-**The package not implemented yet!**
-
-## Installation
-
-    $ npm install -g pkgtool
-
 ## Features
 
   * Hold dependencies versions
@@ -15,11 +9,50 @@ Tool for managing package's dependencies versions.
   * Expand dependencies versions from node_modules
   * CLI and Programmatical APIs
 
+## Installation
+
+    $ npm install -g pkgtool
+
+## Usage
+
+### Hold
+
+    $ pkgtool hold
+
+or
+
+    $ pkgtool /path/to/package/dir hold
+
+### Update
+
+#### all
+
+    $ pkgtool update
+
+#### update only specified
+
+    $ pkgtool update mocha sinon
+
+### Expand
+
+    $ pkgtool expand
+
+
+### Programmatically
+```coffeescript
+pkgtool = require "pkgtool"
+
+pkgtool( "." ).load ( err ) ->
+  @expand ( err ) ->
+    @save( err ) ->
+      console.log( "Yay!" ) unless err
+```
+
 ## License
 
 (The MIT License)
 
-Copyright (c) 2009-2012 Vladimir Tsvang &lt;vtsvang@gmail.com&gt;
+Copyright (c) 2013 Vladimir Tsvang &lt;vtsvang@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

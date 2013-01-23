@@ -1,7 +1,7 @@
 {
   "name": "pkgtool",
   "description": "Tool for holding and updating package dependencies versions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Vladimir Tsvang <vtsvang@gmail.com>",
   "dependencies": {
     "coffee-script": "1.4.0",
