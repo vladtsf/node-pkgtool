@@ -9,7 +9,8 @@
     "commander": "*",
     "async": "*",
     "request": "*",
-    "wrench": "*"
+    "wrench": "*",
+    "colors": "*"
   },
   "devDependencies": {
     "mocha": "*",
@@ -26,7 +27,7 @@
     "pkgtool": "bin/pkgtool"
   },
   "scripts": {
-    "prepublish" : "npm prune",
+    "prepublish": "npm prune",
     "test": "./node_modules/mocha/bin/mocha test/run.coffee --debug"
   },
   "engines": {

@@ -8,6 +8,36 @@ class Package
   path = require "path"
   request = require "request"
   async = require "async"
+  colors = require "colors"
+
+  # Log message.
+  #
+  # @example Just log.
+  #   new Package( __dirname ).log "hello, world!"
+  #
+  # @example Log error.
+  #   new Package( __dirname ).log "hello, world!", on
+  #
+  # @param [String] message message to log
+  # @param [Boolean] err is it error?
+  # @return [Package] package instance
+  #
+  log: ( message, err ) ->
+    @logger.call( @, err, message ) if typeof @logger is "function"
+
+    @
+
+  # Set logger callback.
+  #
+  # @example Set logger.
+  #   new Package( __dirname ).setLogger ( err, message ) ->
+  #     console.log if err then message.red else message.green
+  #
+  # @param [Function] logger log callback
+  # @return [Package] package instance
+  #
+  setLogger: ( @logger ) ->
+    @
 
   # Construct a new package.
   #
@@ -188,6 +218,9 @@ class Package
         else if pkg in devDependencies
           @devDependencies[ pkg ] = results[ idx ]
 
+      @log "Updated #{ packages.length } package(s)".cyan
+      @log "  #{ ( "#{ pkgName }@#{ results[ idx ] }" for own pkgName, idx in packages ).join( "\n  " ).green }"
+
       # successful callback
       callback.call @
 
@@ -245,6 +278,9 @@ class Package
         else if pkg in devDependencies
           @devDependencies[ pkg ] = results[ idx ]
 
+      @log "Holded #{ packages.length } package(s)".cyan
+      @log "  #{ ( "#{ pkgName }@#{ results[ idx ] }" for own pkgName, idx in packages ).join( "\n  " ).green }"
+
       # successful callback
       callback.call @
 
@@ -278,6 +314,7 @@ class Package
             # if this package not listed in dependencies, add it
             unless ( name in Object.keys ( @dependencies ? {} ) ) or ( name in Object.keys ( @devDependencies ? {} ) )
               @dependencies[ name ] = version
+              @log "Added ".cyan + "#{ name }@#{ version }".green + " to package.json".cyan
 
         callback.call @
 

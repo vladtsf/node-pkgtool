@@ -1,4 +1,5 @@
 program = require "commander"
+colors = require "colors"
 pkgtool = require "../index.coffee"
 pkg = require "../package.json"
 
@@ -28,12 +29,22 @@ command = program.args.shift()
 unless command in knownCommands
   program.help()
 
+toolInstance = pkgtool packagePath
 
-pkgInstance = pkgtool packagePath
-
+# finish callback
 done = ( err ) ->
-  @save() unless err
+  if err
+    @log err.toString().red
+  else
+    @save()
 
-pkgInstance.load ( err ) ->
+# logger
+toolInstance.setLogger ( err, message ) ->
+  console[ if err then "error" else "log" ] message
+
+toolInstance.load ( err ) ->
   # routing
-  @[ command ] [ program.args..., done ]...
+  if program.args.length
+    @[ command ] [ program.args, done ]...
+  else
+    @[ command ]( done )
