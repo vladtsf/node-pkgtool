@@ -10,7 +10,7 @@ global.shld = require( "should" )
 
 global.__testsRootDir = __dirname
 global.__tmpDir = path.join(fs.realpathSync( path.join( __dirname, ".." ) ), ".tmp")
-global.__binaryPath = path.join( __dirname, "bin", "pkgtool" )
+global.__binaryPath = path.join( __dirname, "..", "bin", "pkgtool" )
 
 global.__fixturesPaths = {
   successful: path.join( __testsRootDir, "fixtures", "packages", "successful.json" ),
