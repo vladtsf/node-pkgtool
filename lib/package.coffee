@@ -230,6 +230,9 @@ class Package
       # load all the packages in dependencies
       packages = [ dependencies..., devDependencies... ]
 
+    # filter asterisked packages
+    packages = ( pkg for own pkg in packages when ( @dependencies[ pkg ] ? @devDependencies[ pkg ] ) is "*" )
+
     # load latest packages versions
     async.map packages, @fetch.bind( @ ) , ( err, results ) =>
       # handle errors
