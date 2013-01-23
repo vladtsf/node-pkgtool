@@ -211,15 +211,27 @@ class Package
       # handle errors
       return callback.call( @, err ) if err?
 
+      # list of updated packages
+      updated = []
+
       # save changes
       for own pkg, idx in packages
         if pkg in dependencies
+          # track update
+          updated.push( pkg ) if @dependencies[ pkg ] isnt results[ idx ]
+
           @dependencies[ pkg ] = results[ idx ]
         else if pkg in devDependencies
+          # track update
+          updated.push( pkg ) if @devDependencies[ pkg ] isnt results[ idx ]
+
           @devDependencies[ pkg ] = results[ idx ]
 
-      @log "Updated #{ packages.length } package(s)".cyan
-      @log "  #{ ( "#{ pkgName }@#{ results[ idx ] }" for own pkgName, idx in packages ).join( "\n  " ).green }"
+      if updated.length
+        @log "Updated #{ updated.length } package(s)".cyan
+        @log "  #{ ( "#{ pkgName }@#{ results[ idx ] }" for own pkgName, idx in updated ).join( "\n  " ).green }"
+      else
+        @log "Already up-to-date.".green
 
       # successful callback
       callback.call @
