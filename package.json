@@ -1,21 +1,21 @@
 {
   "name": "pkgtool",
   "description": "Tool for holding and updating package dependencies versions",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Vladimir Tsvang <vtsvang@gmail.com>",
   "dependencies": {
-    "coffee-script": "*",
-    "glob": "*",
-    "commander": "*",
-    "async": "*",
-    "request": "*",
-    "wrench": "*",
-    "colors": "*"
+    "coffee-script": "1.4.0",
+    "glob": "3.1.16",
+    "commander": "1.1.1",
+    "async": "0.1.22",
+    "request": "2.12.0",
+    "wrench": "1.4.4",
+    "colors": "0.6.0-1"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*",
-    "sinon": "*"
+    "mocha": "1.8.1",
+    "should": "1.2.1",
+    "sinon": "1.5.2"
   },
   "keywords": [
     "npm",
