@@ -151,7 +151,7 @@ class Package
   #
   # @example Update specified dependence
   #   new Package( __dirname ).load ( err ) ->
-  #     @update "mochq", ( err ) ->
+  #     @update "mocha", ( err ) ->
   #       unless err
   #         console.log "mocha version has updated"
   #       else
@@ -178,6 +178,60 @@ class Package
 
     # load latest packages versions
     async.map packages, ( ( pkg, done ) => @fetch pkg, on, done ), ( err, results ) =>
+      # handle errors
+      return callback.call( @, err ) if err?
+
+      # save changes
+      for own pkg, idx in packages
+        if pkg in dependencies
+          @dependencies[ pkg ] = results[ idx ]
+        else if pkg in devDependencies
+          @devDependencies[ pkg ] = results[ idx ]
+
+      # successful callback
+      callback.call @
+
+    @
+
+  # Hold dependencies.
+  #
+  # @example Hold dependencies
+  #   new Package( __dirname ).load ( err ) ->
+  #     @hold ( err ) ->
+  #       unless err
+  #         console.log "dependencies holded"
+  #       else
+  #         console.log "hold failed"
+  #
+  # @example Hold specified dependence
+  #   new Package( __dirname ).load ( err ) ->
+  #     @hold "mocha", ( err ) ->
+  #       unless err
+  #         console.log "mocha version has holded"
+  #       else
+  #         console.log "hold failed"
+  #
+  # @param [String, Array] packages names of packages to update
+  # @param [Function] callback will be invoked when dependencies updated
+  # @return [Package] package instance
+  #
+  hold: ( packages, callback = -> ) ->
+    # cache dependencies
+    dependencies = Object.keys @dependencies
+    devDependencies = Object.keys @devDependencies
+
+    # if passed only one package
+    packages = [ packages ] if typeof packages is "string"
+
+    # if packages argument is missing
+    if typeof packages is "function"
+      # callback was the first argument if the packages is missing
+      callback = packages
+      # load all the packages in dependencies
+      packages = [ dependencies..., devDependencies... ]
+
+    # load latest packages versions
+    async.map packages, @fetch.bind( @ ) , ( err, results ) =>
       # handle errors
       return callback.call( @, err ) if err?
 
@@ -253,7 +307,7 @@ class Package
       try
         callback.call @, null, require( depPath ).version
       catch e
-        callback.call @, e
+        @fetch packageName, on, callback
     else
       # fetch version from npm registry
       request "https://registry.npmjs.org/#{ packageName }/latest/", ( err, res ) =>

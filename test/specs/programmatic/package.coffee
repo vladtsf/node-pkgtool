@@ -121,6 +121,32 @@ describe "Package", ->
       @successful.load ( err ) ->
         @expand done
 
+  describe "@hold()", ->
+    @timeout 10e3
+    @slow 3e3
+
+    it "should lookup used dependencies versions", ( done ) ->
+      @successful2.load ( err ) ->
+        @hold ( err ) ->
+          @dependencies.should.have.property "foo", "0.0.1"
+          done()
+
+    it "should hold only specified dependencies if it does", ( done ) ->
+      @successful2.load ( err ) ->
+        @hold "foo", ( err ) ->
+          @dependencies.should.have.property "foo", "0.0.1"
+          done()
+
+    it "should hold specified dependencies passed as array", ( done ) ->
+      @successful2.load ( err ) ->
+        @hold [ "foo" ], ( err ) ->
+          @dependencies.should.have.property "foo", "0.0.1"
+          done()
+
+    it "should invoke callback", ( done ) ->
+      @successful2.load ( err ) ->
+        @hold done
+
   describe "@fetch()", ->
     @timeout 10e3
     @slow 3e3
