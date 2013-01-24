@@ -26,6 +26,14 @@ class Package
     # Registry override
     @registry = null
 
+  # Load and parse json file.
+  #
+  # @param [String] fPath path to json file
+  # @return [Object] parsed json
+  #
+  require: ( fPath ) ->
+    JSON.parse fs.readFileSync fPath
+
   # Log message.
   #
   # @example Just log.
@@ -150,7 +158,7 @@ class Package
 
       try
         # try to load info from package.json
-        @pkg = require @path
+        @pkg = @require @path
 
         # fill dependencies
         @dependencies = @pkg.dependencies
@@ -158,7 +166,7 @@ class Package
 
         callback.call @
       catch e
-        if e.code is "MODULE_NOT_FOUND"
+        if e.code is "ENOENT"
           # if package.json not exists, should initialize dependencies
           @create callback
         else
@@ -366,7 +374,7 @@ class Package
 
         for own file in files
           try
-            { name, version } = require file
+            { name, version } = @require file
 
             # if this package not listed in dependencies, add it
             unless ( name in Object.keys ( @dependencies ? {} ) ) or ( name in Object.keys ( @devDependencies ? {} ) )
@@ -402,7 +410,7 @@ class Package
     if ( not forceRemote ) and fs.existsSync( depPath = path.join ( path.dirname @path ), "node_modules", packageName, "package.json" )
       # try to determine version according from node_modules containment at first
       try
-        callback.call @, null, require( depPath ).version
+        callback.call @, null, @require( depPath ).version
       catch e
         @fetch packageName, on, callback
     else
