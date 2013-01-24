@@ -52,12 +52,14 @@ pkgtool( "." ).load ( err ) ->
 
 Add specs for any new or changed functionality.
 
-Runs tests: `npm test`
+Run tests: `npm test`
 
 Generate documentation: `npm run-script generate-doc`
 
 # Changelog
 
+* v0.3.1
+  * Fixed issue with require cache
 * v0.3.0
   * Registry support
   * Documentation
