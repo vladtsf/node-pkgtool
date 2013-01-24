@@ -1,6 +1,7 @@
 global.fs = require( "fs" )
 global.path = require( "path" )
 global.wrench = require( "wrench" )
+global.rc = require( "rc" )
 global.sinon = require( "sinon" )
 global.request = require( "request" )
 global.exec = require('child_process').exec

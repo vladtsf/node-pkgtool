@@ -3,12 +3,28 @@
 class Package
 
   fs = require "fs"
+  rc = require "rc"
+  url = require "url"
   util = require "util"
   glob = require "glob"
   path = require "path"
   request = require "request"
   async = require "async"
   colors = require "colors"
+
+  # Construct a new package.
+  #
+  # @param [String] @path path to package.json file
+  #
+  constructor: ( @path ) ->
+    # Package's dependencies for production
+    @dependencies = {}
+
+    # Package's dependencies for development
+    @devDependencies = {}
+
+    # Registry override
+    @registry = null
 
   # Log message.
   #
@@ -33,22 +49,50 @@ class Package
   #   new Package( __dirname ).setLogger ( err, message ) ->
   #     console.log if err then message.red else message.green
   #
-  # @param [Function] logger log callback
+  # @param [Function] @logger log callback
   # @return [Package] package instance
   #
   setLogger: ( @logger ) ->
     @
 
-  # Construct a new package.
+  # Set registry.
   #
-  # @param [String] @path path to package.json file
+  # @example Set registry.
+  #   new Package( __dirname ).setRegistry "http://registry.npmjs.org/"
   #
-  constructor: ( @path ) ->
-    # Package's dependencies for production
-    @dependencies = {}
+  # @param [String] @registry
+  # @return [Package] package instance
+  #
+  setRegistry: ( @registry ) ->
+    @
 
-    # Package's dependencies for development
-    @devDependencies = {}
+  # Get package url in registry.
+  #
+  # @example Get package url.
+  #   new Package( __dirname ).load ( err ) ->
+  #     console.log @getPackageURL "mocha", "1.1.1"
+  #
+  # @param [String] @registry
+  # @return [Package] package instance
+  #
+  getPackageURL: ( packageName, version = "latest" ) ->
+    # lookup registry url
+    registry = @registry ? @rc.registry
+
+    # parse base registry url
+    urlObj = url.parse registry
+
+    # get the path tokens
+    tokens = ( token for own token in urlObj.pathname.split( "/" ) when token isnt "" )
+
+    # add package name and version
+    tokens.push packageName, version
+
+    # set pathname
+    urlObj.pathname = "/#{ tokens.join "/" }"
+
+    # return formatted url
+    url.format urlObj
 
   # Lookup package.json path.
   #
@@ -84,8 +128,6 @@ class Package
 
     @
 
-
-
   # Load package.
   #
   # @example Load package
@@ -102,6 +144,9 @@ class Package
     @lookup ( err ) ->
       # throw error if lookup failed
       return callback.call( @, err ) if err
+
+      # load npmrc configuration
+      @rc = rc "npm", registry: "https://registry.npmjs.org/"
 
       try
         # try to load info from package.json
@@ -193,8 +238,8 @@ class Package
   #
   update: ( packages, callback = -> ) ->
     # cache dependencies
-    dependencies = Object.keys @dependencies
-    devDependencies = Object.keys @devDependencies
+    dependencies = Object.keys @dependencies ? {}
+    devDependencies = Object.keys @devDependencies ? {}
 
     # if passed only one package
     packages = [ packages ] if typeof packages is "string"
@@ -262,8 +307,8 @@ class Package
   #
   hold: ( packages, callback = -> ) ->
     # cache dependencies
-    dependencies = Object.keys @dependencies
-    devDependencies = Object.keys @devDependencies
+    dependencies = Object.keys @dependencies ? {}
+    devDependencies = Object.keys @devDependencies ? {}
 
     # if passed only one package
     packages = [ packages ] if typeof packages is "string"
@@ -362,7 +407,7 @@ class Package
         @fetch packageName, on, callback
     else
       # fetch version from npm registry
-      request "https://registry.npmjs.org/#{ packageName }/latest/", ( err, res ) =>
+      request @getPackageURL( packageName, "latest" ), ( err, res ) =>
         # something went wrong
         return callback.call( @, err ) if err?
 

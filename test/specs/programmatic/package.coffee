@@ -1,5 +1,8 @@
 describe "Package", ->
 
+  before ->
+    @npmrc = rc "npm"
+
   describe "@lookup()", ->
 
     it "should lookup package.json in specified directory", ( done ) ->
@@ -7,7 +10,25 @@ describe "Package", ->
         @path.should.equal path.join( fs.realpathSync path.join __tmpDir, "successful", "package.json" ), "package.json"
         done()
 
+  describe "@getPackageURL()", ->
+
+    it "should apply registry overrides", ( done ) ->
+      @successful.load ( err ) ->
+        @setRegistry "http://foo.com/"
+        @getPackageURL( "mocha" ).should.equal "http://foo.com/mocha/latest"
+        done()
+
+    it "should apply specified version", ( done ) ->
+      @successful.load ( err ) =>
+        @successful.getPackageURL( "mocha", "1.0.0" ).should.equal "#{ @npmrc.registry }mocha/1.0.0"
+        done()
+
   describe "@load()", ->
+
+    it "should define registry, which specified in .npmrc", ( done ) ->
+      @successful.load ( err ) =>
+        @successful.rc.registry.should.equal @npmrc.registry
+        done()
 
     it "should fill @dependencies property", ( done ) ->
       @successful.load ( err ) ->
