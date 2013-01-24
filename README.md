@@ -56,6 +56,23 @@ Runs tests: `npm test`
 
 Generate documentation: `npm run-script generate-doc`
 
+# Changelog
+
+* v0.3.0
+  * Registry support
+  * Documentation
+  * Fixed couple of bugs
+* v0.2.2
+  * Fixed example in README.md
+* v0.2.1
+  * README updated
+* v0.2.0
+  * Logger
+* v0.1.0
+  * First version
+* v0.0.1
+  * Initial structure
+
 ## License
 
 (The MIT License)
