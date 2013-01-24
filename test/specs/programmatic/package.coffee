@@ -23,6 +23,11 @@ describe "Package", ->
         @successful.getPackageURL( "mocha", "1.0.0" ).should.equal "#{ @npmrc.registry }mocha/1.0.0"
         done()
 
+    it "should get version from publishConfig section of package.json", ( done ) ->
+      @publishConfig.load ( err ) ->
+        @getPackageURL( "mocha", "1.0.0" ).should.equal "http://my-internal-registry.local/mocha/1.0.0"
+        done()
+
   describe "@load()", ->
 
     it "should define registry, which specified in .npmrc", ( done ) ->

@@ -77,7 +77,7 @@ class Package
   #
   getPackageURL: ( packageName, version = "latest" ) ->
     # lookup registry url
-    registry = @registry ? @rc.registry
+    registry = @registry ? @pkg.publishConfig?.registry ? @rc.registry
 
     # parse base registry url
     urlObj = url.parse registry
