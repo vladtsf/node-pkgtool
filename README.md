@@ -44,7 +44,7 @@ pkgtool = require "pkgtool"
 
 pkgtool( "." ).load ( err ) ->
   @expand ( err ) ->
-    @save( err ) ->
+    @save ( err ) ->
       console.log( "Yay!" ) unless err
 ```
 
