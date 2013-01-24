@@ -8,7 +8,7 @@ knownCommands = [ "expand", "hold", "update" ]
 program
   .version( pkg.version )
   .usage( "[options] <path> <command>" )
-  .option( "-f, --force", "Force fetch latest versions" )
+  .option( "--registry <url>", "registry url" ) # rc handles this argument
   .parse( process.argv )
 
 # show help unless arguments passed
