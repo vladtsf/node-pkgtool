@@ -1,7 +1,7 @@
 describe "Package", ->
 
   before ->
-    @npmrc = rc "npm"
+    @npmrc = rc "npm", registry: "https://registry.npmjs.org/"
 
   describe "@lookup()", ->
 
