@@ -48,6 +48,14 @@ pkgtool( "." ).load ( err ) ->
       console.log( "Yay!" ) unless err
 ```
 
+# Development
+
+Add specs for any new or changed functionality.
+
+Runs tests: `npm test`
+
+Generate documentation: `npm run-script generate-doc`
+
 ## License
 
 (The MIT License)
