@@ -1,4 +1,7 @@
 /node_modules/
+/scripts/
+/doc/
+/.travis.yml
 /.gitignore
-/test
-/.tmp
+/test/
+/.tmp/
