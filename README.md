@@ -58,6 +58,8 @@ Generate documentation: `npm run-script generate-doc`
 
 # Changelog
 
+* v0.3.2
+  * Updated documentation and npmignored doc
 * v0.3.1
   * Fixed issue with require cache
 * v0.3.0
