@@ -26,6 +26,7 @@ describe "Pkg Tool", ->
     @timeout 15e3
     @slow 5e3
 
+    require "./specs/cli/common"
     require "./specs/cli/expand"
     require "./specs/cli/hold"
     require "./specs/cli/update"

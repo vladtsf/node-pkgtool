@@ -43,6 +43,10 @@ toolInstance.setLogger ( err, message ) ->
   console[ if err then "error" else "log" ] message
 
 toolInstance.load ( err ) ->
+  # stop running if load was failed
+  if err
+    return @log "Can't parse package.json, [#{ err.toString() }]".red, on
+
   # routing
   if program.args.length
     @[ command ] [ program.args, done ]...
