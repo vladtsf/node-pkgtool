@@ -58,6 +58,8 @@ Generate documentation: `npm run-script generate-doc`
 
 # Changelog
 
+* v0.3.3
+  * Fixed bug when cli removes package.json contents (Thanks to [Alexandr Lukin](https://github.com/kerbyfc))
 * v0.3.2
   * Updated documentation and npmignored doc
 * v0.3.1
