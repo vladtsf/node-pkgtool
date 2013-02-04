@@ -115,7 +115,7 @@
         </p>
       </nav>
       <div id='filecontents'>
-        <h1>pkgtool <a href="https://travis-ci.org/vtsvang/node-pkgtool"><img src="https://travis-ci.org/vtsvang/node-pkgtool.png" alt="Build Status"></a></h1><p>Tool for managing package&#39;s dependencies versions.</p><h2>Features</h2>
+        <h1>pkgtool <a href="https://travis-ci.org/vtsvang/node-pkgtool"><img src="https://travis-ci.org/vtsvang/node-pkgtool.png" alt="Build Status"></a> <a href="http://coderwall.com/vtsvang"><img src="http://api.coderwall.com/vtsvang/endorsecount.png" alt="endorse"></a></h1><p>Tool for managing package&#39;s dependencies versions.</p><h2>Features</h2>
 <ul>
 <li>Hold dependencies versions</li>
 <li>Update dependencies versions</li>
@@ -143,6 +143,18 @@ pkgtool( &quot;.&quot; ).load ( err ) -&gt;
       console.log( &quot;Yay!&quot; ) unless err</code></pre>
 <h1>Development</h1><p>Add specs for any new or changed functionality.</p><p>Run tests: <code>npm test</code></p><p>Generate documentation: <code>npm run-script generate-doc</code></p><h1>Changelog</h1>
 <ul>
+<li>v0.3.4<ul>
+<li>Now using asynchronous runtime configuration library</li>
+</ul>
+</li>
+<li>v0.3.3<ul>
+<li>Fixed bug when cli removes package.json contents (Thanks to <a href="https://github.com/kerbyfc">Alexandr Lukin</a>)</li>
+</ul>
+</li>
+<li>v0.3.2<ul>
+<li>Updated documentation and npmignored doc</li>
+</ul>
+</li>
 <li>v0.3.1<ul>
 <li>Fixed issue with require cache</li>
 </ul>
@@ -192,7 +204,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
     </div>
     <div id='footer'>
   Generated on
-  Thu Jan 24 2013 17:07:04 GMT+0400 (MSK)
+  Mon Feb 04 2013 13:02:19 GMT+0400 (MSK)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v1.5.4
