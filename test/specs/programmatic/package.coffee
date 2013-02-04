@@ -1,8 +1,9 @@
 describe "Package", ->
 
-  before ->
-    @npmrc = rc "npm", registry: "https://registry.npmjs.org/"
-
+  before ( done ) ->
+    rc "npm", registry: "https://registry.npmjs.org/", ( err, @npmrc ) =>
+      done()
+      
   describe "@lookup()", ->
 
     it "should lookup package.json in specified directory", ( done ) ->

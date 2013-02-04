@@ -3,7 +3,7 @@
 class Package
 
   fs = require "fs"
-  rc = require "rc"
+  rc = require "runtime-configuration"
   url = require "url"
   util = require "util"
   glob = require "glob"
@@ -154,24 +154,25 @@ class Package
       return callback.call( @, err ) if err
 
       # load npmrc configuration
-      @rc = rc "npm", registry: "https://registry.npmjs.org/"
+      rc "npm", registry: "https://registry.npmjs.org/", ( err, config ) =>
+        @rc = config
 
-      try
-        # try to load info from package.json
-        @pkg = @require @path
+        try
+          # try to load info from package.json
+          @pkg = @require @path
 
-        # fill dependencies
-        @dependencies = @pkg.dependencies
-        @devDependencies = @pkg.devDependencies
+          # fill dependencies
+          @dependencies = @pkg.dependencies
+          @devDependencies = @pkg.devDependencies
 
-        callback.call @
-      catch e
-        if e.code is "ENOENT"
-          # if package.json not exists, should initialize dependencies
-          @create callback
-        else
-          # if package.json is broken
-          callback.call @, e
+          callback.call @
+        catch e
+          if e.code is "ENOENT"
+            # if package.json not exists, should initialize dependencies
+            @create callback
+          else
+            # if package.json is broken
+            callback.call @, e
 
     @
 
