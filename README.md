@@ -58,6 +58,8 @@ Generate documentation: `npm run-script generate-doc`
 
 # Changelog
 
+* v0.3.5
+  * Updated runtime-configuration version
 * v0.3.4
   * Now using asynchronous runtime configuration library
 * v0.3.3
